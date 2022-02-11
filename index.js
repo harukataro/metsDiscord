@@ -7,7 +7,8 @@ const { checkServerIdentity } = require('tls');
 const client = new Discord.Client();
 const file = 'response.csv';
 const BOT_TOKEN = process.env.BOT_TOKEN;
-
+let lastUserId = '';
+let lastListId = '';
 
 listCheck = (msg) => {
   console.log("listCheck");
@@ -16,8 +17,15 @@ listCheck = (msg) => {
   {
     if(val.includes(kList[i][0]))
     {
+      if (msg.author.id === lastUserId && i === lastListId)
+      {
+        console.log("same user and message with last one");
+        return;
+      }
       msg.reply(kList[i][1]);
       console.log("res:", kList[i][1]);
+      lastUserId = msg.author.id;
+      lastListId = i;
       return true;
     }
   }
